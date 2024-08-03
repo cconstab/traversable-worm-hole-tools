@@ -11,15 +11,21 @@ import 'package:chalkdart/chalk.dart';
 
 Future<void> main(List<String> args) async {
   ArgParser argsParser = CLIBase.argsParser
-    ..addOption('other-atsign', abbr: 'o', mandatory: true, help: 'The atSign we want to communicate with');
+    ..addOption('other-atsign',
+        abbr: 'o',
+        mandatory: true,
+        help: 'The atSign we want to communicate with');
 
   late final AtClient atClient;
-  late final String nameSpace, myAtsign, otherAtsign;
+  late final String myAtsign, otherAtsign;
+  late String nameSpace;
+
   try {
     var parsed = argsParser.parse(args);
     otherAtsign = parsed['other-atsign'];
 
-    CLIBase cliBase = await CLIBase.fromCommandLineArgs(args, parser: argsParser);
+    CLIBase cliBase =
+        await CLIBase.fromCommandLineArgs(args, parser: argsParser);
     atClient = cliBase.atClient;
 
     nameSpace = atClient.getPreferences()!.namespace!;
@@ -31,11 +37,9 @@ Future<void> main(List<String> args) async {
   }
 
   String keyName = 'message';
+  nameSpace = "$nameSpace.twh";
 
   // Construct the ID object we will use to do the fetch
-  // In this case, if we are @alice, the other atSign is @bob, and the
-  // nameSpace is 'demo', then the ID for the message which bob has shared with
-  // us would be @alice:message.demo@bob
   AtKey sharedRecordID = AtKey()
     ..key = keyName
     ..sharedBy = otherAtsign
@@ -43,23 +47,11 @@ Future<void> main(List<String> args) async {
     ..namespace = nameSpace;
   //print(sharedRecordID);
 
-  // Equivalent ways of doing the above
-  // 1) If you're familiar with ID structure
-  // sharedRecordID =
-  //     AtKey.fromString('$myAtsign:$keyName.$nameSpace$otherAtsign');
-  // print(sharedRecordID);
-  // // 2) Using AtKey.shared
-  // sharedRecordID =
-  //     (AtKey.shared(keyName, namespace: nameSpace, sharedBy: otherAtsign)
-  //           ..sharedWith(myAtsign))
-  //         .build();
-  // print(sharedRecordID);
-
   try {
     var val = await atClient.get(sharedRecordID);
     //stdout.writeln(val.toString());
     //stdout.writeln(chalk.brightGreen(val.value));
-    stdout.write(val.value);
+    stdout.writeln(val.value);
   } catch (e) {
     print(e.toString());
     print(chalk.brightRed('Null'));

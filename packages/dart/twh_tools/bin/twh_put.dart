@@ -11,25 +11,34 @@ import 'package:chalkdart/chalk.dart';
 
 Future<void> main(List<String> args) async {
   ArgParser argsParser = CLIBase.argsParser
-    ..addOption('other-atsign', abbr: 'o', mandatory: true, help: 'The atSign we want to communicate with')
+    ..addOption('other-atsign',
+        abbr: 'o',
+        mandatory: true,
+        help: 'The atSign we want to communicate with')
     ..addOption('timeout',
-        abbr: 't', mandatory: false, defaultsTo: "No TimeOut", help: 'TimeOut the message after X seconds')
-    ..addOption('message', abbr: 'm', mandatory: true, help: 'The message we want to send');
+        abbr: 't',
+        mandatory: false,
+        defaultsTo: "No TimeOut",
+        help: 'TimeOut the message after X seconds')
+    ..addOption('message',
+        abbr: 'm', mandatory: false,defaultsTo: "helloworld", help: 'The message we want to send');
 
   late final AtClient atClient;
-  late final String nameSpace, myAtsign, otherAtsign, timeout, message;
+  late final String myAtsign, otherAtsign, timeout, message;
+  late String nameSpace;
   try {
     var parsed = argsParser.parse(args);
     otherAtsign = parsed['other-atsign'];
     message = parsed['message'];
     timeout = parsed['timeout'];
 
-    CLIBase cliBase = await CLIBase.fromCommandLineArgs(args, parser: argsParser);
+    CLIBase cliBase =
+        await CLIBase.fromCommandLineArgs(args, parser: argsParser);
     atClient = cliBase.atClient;
 
     nameSpace = atClient.getPreferences()!.namespace!;
+    nameSpace = "$nameSpace.twh";
     myAtsign = atClient.getCurrentAtSign()!;
-
   } catch (e) {
     print(argsParser.usage);
     print(e);
@@ -54,7 +63,7 @@ Future<void> main(List<String> args) async {
 
   try {
     await atClient.put(sharedRecordID, message, putRequestOptions: pro);
-    stderr.writeln(chalk.green("sent: ")+ chalk.white(message));
+    stderr.writeln(chalk.green("sent: ") + chalk.white(message));
   } catch (e) {
     stderr.write(chalk.brightRed('Error: '));
     stderr.writeln(chalk.white(e.toString()));

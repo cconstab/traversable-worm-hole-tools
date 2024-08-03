@@ -18,7 +18,8 @@ Future<void> main(List<String> args) async {
         abbr: 'm', mandatory: true, help: 'The message we want to send');
 
   late final AtClient atClient;
-  late final String nameSpace, myAtsign, otherAtsign, message;
+  late final String myAtsign, otherAtsign, message;
+  late String nameSpace;
   try {
     var parsed = argsParser.parse(args);
     otherAtsign = parsed['other-atsign'];
@@ -29,6 +30,7 @@ Future<void> main(List<String> args) async {
     atClient = cliBase.atClient;
 
     nameSpace = atClient.getPreferences()!.namespace!;
+    nameSpace = "$nameSpace.twh";
     myAtsign = atClient.getCurrentAtSign()!;
   } catch (e) {
     print(argsParser.usage);
@@ -46,20 +48,11 @@ Future<void> main(List<String> args) async {
     ..metadata = (Metadata()
       ..ttl = 60000 // expire after 60 seconds
       ..ttr = -1); // allow recipient to keep a cached copy
-
-  await atClient.notificationService.notify(
-      NotificationParams.forUpdate(sharedRecordID, value: message),
-      waitForFinalDeliveryStatus: false,
-      checkForFinalDeliveryStatus: false);
-
-  // Using notifications we get all the updates
-  // for (int a = 1; a < 101; a++) {
-  //   await atClient.notificationService.notify(
-  //       NotificationParams.forUpdate(sharedRecordID, value: a.toString()),
-  //       waitForFinalDeliveryStatus: false,
-  //       checkForFinalDeliveryStatus: false);
-  // }
-
-  await Future.delayed(Duration(seconds: 1));
+    await atClient.notificationService.notify(
+        NotificationParams.forUpdate(sharedRecordID,
+            value: message, strategy: StrategyEnum.all,priority: PriorityEnum.high,notificationExpiry: Duration(seconds: 60)),
+        waitForFinalDeliveryStatus: false,
+        checkForFinalDeliveryStatus: false);
+  //await Future.delayed(Duration(seconds: 1));
   exit(0);
 }
