@@ -28,6 +28,7 @@ jobs:
       - name: compile and upload
         shell: bash
         run: |
+          ls
           cd traversable-worm-hole-tools/packages/dart/twh_tools
           dart pub get
           dart analyze
