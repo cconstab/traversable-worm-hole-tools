@@ -18,7 +18,7 @@ Future<void> main(List<String> args) async {
     ..addOption('timeout',
         abbr: 't',
         mandatory: false,
-        defaultsTo: "No TimeOut",
+        defaultsTo: "0",
         help: 'TimeOut the message after X seconds')
     ..addOption('message',
         abbr: 'm', mandatory: false,defaultsTo: "helloworld", help: 'The message we want to send');
