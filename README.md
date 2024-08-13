@@ -36,8 +36,12 @@ To use the code/binaries
 
 Get two atSigns from my.atsign.com
 activate the atSigns using `at_activate`
-twh_put/get allow the sending/receiving of a simple string
-twh_pub/sub allow the sending/receiving of streams of strings
+
+
+`twh_put`/`twh_get` allow the sending/receiving of a simple string
+
+
+`twh_pub`/`twh_sub` allow the sending/receiving of streams of strings
 
 
 
