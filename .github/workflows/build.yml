@@ -14,8 +14,9 @@ jobs:
     name: Upload ${{ matrix.os }} binaries to release ${{ github.event.release.tag_name }}
     steps:
       - name: Upload binaries to release ${{ github.event.release.tag_name }} on ${{ matrix.os }}
-        working-directory: ./packages/dart/twh_tools
         uses: caijinglong/action-dart-compile@v1
+        with:
+          working-directory: ./packages/dart/twh_tools
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     permissions:
