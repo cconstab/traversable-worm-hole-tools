@@ -11,6 +11,9 @@ jobs:
       matrix:
         os: [windows, macos, ubuntu]
     runs-on: ${{ matrix.os }}-latest
+    defaults:
+      run:
+        working-directory: ./packages/dart/twh_tools
     name: Upload ${{ matrix.os }} binaries to release ${{ github.event.release.tag_name }}
     steps:
       - name: Upload binaries to release ${{ github.event.release.tag_name }} on ${{ matrix.os }}
