@@ -22,7 +22,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - uses: dart-lang/setup-dart@v2
+      - uses: dart-lang/setup-dart@v1.6.5
         with:
           sdk: stable
       - name: compile and upload
