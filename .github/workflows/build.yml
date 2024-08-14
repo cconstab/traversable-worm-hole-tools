@@ -61,7 +61,6 @@ jobs:
           chmod +x twh/*
       # codesign for apple
       - if: ${{ matrix.os == 'macos-13' || matrix.os == 'macos-14' }}
-        name: Import certificates
         env:
           MACOS_CODESIGN_CERT: ${{ secrets.MACOS_CODESIGN_CERT }}
           MACOS_CODESIGN_CERT_PASSWORD: ${{ secrets.MACOS_CODESIGN_CERT_PASSWORD }}
