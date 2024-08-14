@@ -24,18 +24,18 @@ on how to setup their tools, tests and how to make a pull request.
 
 ### Why?
 
-In DevSecOps we often need tools to get files like certificats or keys from one place to another
+In DevSecOps we often need tools to get files like certificates or keys from one place to another. This is often troublesome as you need to send encrypted but either networking or the lack of encryption keys gets in the way of transfering these small but critical files around safely.
 
 ### What?
 
-The code is written in Dart but the GitHub Action produces binaries for Mac/linux and Windows
+The code is written in Dart but the GitHub Action produces binaries for Mac/Linux and Windows
 
 ### How?
 
 To use the code/binaries
 
 Get two atSigns from my.atsign.com
-activate the atSigns using `at_activate`
+activate the atSigns using `at_activate` on your local machine get keys setup on the remote machine using `at_activate` then use the put/get and pub/sub tools. 
 
 
 `twh_put`/`twh_get` allow the sending/receiving of a simple string
