@@ -41,7 +41,7 @@ jobs:
       - uses: dart-lang/setup-dart@v1.6.5
         with:
           sdk: stable
-      - name: compile and upload
+      - name: compile
         shell: bash
         run: |
           cd packages/dart/twh_tools
@@ -66,7 +66,7 @@ jobs:
       - if: ${{ matrix.os == 'windows-latest' }}
         run: Compress-Archive -Path twh -Destination tarball/${{ matrix.output-name }}.zip
 
-            # notarize the build
+      # notarize the build
       - if: ${{ matrix.os == 'macos-13' || matrix.os == 'macos-14' }}
         env:
           MACOS_APPLE_ID: ${{ secrets.MACOS_APPLE_ID }}
@@ -78,7 +78,9 @@ jobs:
             --team-id "$MACOS_TEAM_ID" \
             --password "$MACOS_APPLE_ID_PASSWORD" \
             --wait
-
+      - name: upload
+        shell: bash
+        run: |
           export TARGET_GZ=${{ matrix.output-name }}_${{ github.event.release.tag_name }}*
           tar -czvf $TARGET_GZ twh/*
           gh release upload ${{ github.event.release.tag_name }} $TARGET_GZ
