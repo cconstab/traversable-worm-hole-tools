@@ -58,7 +58,7 @@ jobs:
               dart compile exe -o twh/$bin_name $dart_file
           done
           chmod +x twh/*
-          export TARGET_GZ=${{ output-name }}_${{ github.event.release.tag_name }}.tar.gz
+          export TARGET_GZ=${{ matrix.output-name }}_${{ github.event.release.tag_name }}.tar.gz
           tar -czvf $TARGET_GZ twh/*
           gh release upload ${{ github.event.release.tag_name }} $TARGET_GZ
     
