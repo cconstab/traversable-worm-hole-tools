@@ -37,7 +37,7 @@ Future<void> main(List<String> args) async {
     atClient = cliBase.atClient;
 
     nameSpace = atClient.getPreferences()!.namespace!;
-    nameSpace = "$nameSpace.twh";
+    nameSpace = "$nameSpace.twh_tools";
     myAtsign = atClient.getCurrentAtSign()!;
   } catch (e) {
     print(argsParser.usage);
