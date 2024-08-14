@@ -18,19 +18,19 @@ jobs:
       matrix:
         include:
           - os: ubuntu-latest
-            output-name: sshnp-linux-x64
+            output-name: twh-linux-x64
             ext: ''
             bundle: 'shell'
           - os: macos-13
-            output-name: sshnp-macos-x64
+            output-name: thw-macos-x64
             ext: ''
             bundle: 'shell'
           - os: macos-14
-            output-name: sshnp-macos-arm64
+            output-name: thw-macos-arm64
             ext: ''
             bundle: 'shell'
           - os: windows-latest
-            output-name: sshnp-windows-x64
+            output-name: twh-windows-x64
             ext: '.exe'
             bundle: 'windows'
     runs-on: ${{ matrix.os }}
