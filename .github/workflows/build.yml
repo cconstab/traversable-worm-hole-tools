@@ -98,7 +98,7 @@ jobs:
             -s "$MACOS_SIGNING_IDENTITY" \
             --options=runtime \
             --entitlements ./tools/templates/entitlements.plist \
-            --prefix "com.ai6bh." \
+            --prefix \
             --timestamp \
             -v \
             twh/{at_activate,twh_put,twh_get,twh_pub,twh_sub}
