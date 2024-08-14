@@ -59,7 +59,7 @@ jobs:
               dart compile exe -o twh/$bin_name $dart_file
           done
           chmod +x twh/*
-      # Sign and zip the build
+      # codesign for apple
       - if: ${{ matrix.os == 'macos-13' || matrix.os == 'macos-14' }}
         name: Import certificates
         env:
@@ -68,7 +68,6 @@ jobs:
           MACOS_SIGNING_IDENTITY: ${{ secrets.MACOS_SIGNING_IDENTITY }}
           MACOS_KEYCHAIN_PASSWORD: ${{ secrets.MACOS_KEYCHAIN_PASSWORD }}
         run: |
-          cd packages/dart/twh_tools
           # Load certificate
           CERT_PATH=$RUNNER_TEMP/twh-codesign.p12
           echo -n "$MACOS_CODESIGN_CERT" | base64 --decode -o $CERT_PATH
@@ -85,10 +84,14 @@ jobs:
             -s "$MACOS_SIGNING_IDENTITY" \
             --options=runtime \
             --entitlements ./tools/templates/entitlements.plist \
-            --prefix \
+            --prefix "com.ai6bh." \
             --timestamp \
             -v \
-            twh/{at_activate,twh_put,twh_get,twh_pub,twh_sub}
+            twh/{at_activate,twh_put,twh_get,twh_pub,twh_sub}       
+      # zip the build
+      - if: ${{ matrix.os == 'macos-13' || matrix.os == 'macos-14' }}
+        run: | 
+          cd packages/dart/twh_tools
           ditto -c -k --keepParent twh tarball/${{ matrix.output-name }}
       - if: ${{ matrix.os == 'ubuntu-latest' }}
         run: |
@@ -98,7 +101,7 @@ jobs:
         run: |
           cd packages/dart/twh_tools
           Compress-Archive -Path twh -Destination tarball/${{ matrix.output-name }}
-
+ 
       # notarize the build
       - if: ${{ matrix.os == 'macos-13' || matrix.os == 'macos-14' }}
         env:
