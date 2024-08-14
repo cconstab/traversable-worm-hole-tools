@@ -72,7 +72,36 @@ jobs:
         run: |
           cd packages/dart/twh_tools
           Compress-Archive -Path twh -Destination tarball/${{ matrix.output-name }}
-
+      # codesign for apple
+      - if: ${{ matrix.os == 'macos-13' || matrix.os == 'macos-14' }}
+        name: Import certificates
+        env:
+          MACOS_CODESIGN_CERT: ${{ secrets.MACOS_CODESIGN_CERT }}
+          MACOS_CODESIGN_CERT_PASSWORD: ${{ secrets.MACOS_CODESIGN_CERT_PASSWORD }}
+          MACOS_SIGNING_IDENTITY: ${{ secrets.MACOS_SIGNING_IDENTITY }}
+          MACOS_KEYCHAIN_PASSWORD: ${{ secrets.MACOS_KEYCHAIN_PASSWORD }}
+        run: |
+          cd packages/dart/twh_tools
+          # Load certificate
+          CERT_PATH=$RUNNER_TEMP/twh-codesign.p12
+          echo -n "$MACOS_CODESIGN_CERT" | base64 --decode -o $CERT_PATH
+          # create temp keychain
+          KEYCHAIN_PATH=$RUNNER_TEMP/build.keychain
+          security create-keychain -p "$MACOS_KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+          security default-keychain -s $KEYCHAIN_PATH
+          security unlock-keychain -p "$MACOS_KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+          security import $CERT_PATH -k $KEYCHAIN_PATH -P "$MACOS_CODESIGN_CERT_PASSWORD" -T /usr/bin/codesign
+          security set-key-partition-list -S apple-tool:apple,:,codesign: -s -k "$MACOS_KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+          # codesign
+          /usr/bin/codesign \
+            --force \
+            -s "$MACOS_SIGNING_IDENTITY" \
+            --options=runtime \
+            --entitlements ./tools/templates/entitlements.plist \
+            --prefix "com.ai6bh." \
+            --timestamp \
+            -v \
+            twh/{at_activate,twh_put,twh_get,twh_pub,twh_sub}
       # notarize the build
       - if: ${{ matrix.os == 'macos-13' || matrix.os == 'macos-14' }}
         env:
