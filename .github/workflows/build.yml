@@ -58,9 +58,7 @@ jobs:
               echo $bin_name
               dart compile exe -o twh/$bin_name $dart_file
           done
-          echo "chmod"
           chmod +x twh/*
-          echo "chmodded"
       # codesign for apple
       - if: ${{ matrix.os == 'macos-13' || matrix.os == 'macos-14' }}
         env:
@@ -69,7 +67,6 @@ jobs:
           MACOS_SIGNING_IDENTITY: ${{ secrets.MACOS_SIGNING_IDENTITY }}
           MACOS_KEYCHAIN_PASSWORD: ${{ secrets.MACOS_KEYCHAIN_PASSWORD }}
         run: |
-          echo "building"
           cd packages/dart/twh_tools  
           # Load certificate
           CERT_PATH=$RUNNER_TEMP/twh-codesign.p12
