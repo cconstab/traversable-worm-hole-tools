@@ -61,11 +61,17 @@ jobs:
           chmod +x twh/*
       # zip the build
       - if: ${{ matrix.os == 'macos-13' || matrix.os == 'macos-14' }}
-        run: ditto -c -k --keepParent twh tarball/${{ matrix.output-name }}.zip
+        run: | 
+          cd packages/dart/twh_tools
+          ditto -c -k --keepParent twh tarball/${{ matrix.output-name }}.zip
       - if: ${{ matrix.os == 'ubuntu-latest' }}
-        run: tar -cvzf tarball/${{ matrix.output-name }}.tgz twh
+        run: |
+          cd packages/dart/twh_tools
+          tar -cvzf tarball/${{ matrix.output-name }}.tgz twh
       - if: ${{ matrix.os == 'windows-latest' }}
-        run: Compress-Archive -Path twh -Destination tarball/${{ matrix.output-name }}.zip
+        run: |
+          cd packages/dart/twh_tools
+          Compress-Archive -Path twh -Destination tarball/${{ matrix.output-name }}.zip
 
       # notarize the build
       - if: ${{ matrix.os == 'macos-13' || matrix.os == 'macos-14' }}
@@ -74,6 +80,7 @@ jobs:
           MACOS_TEAM_ID: ${{ secrets.MACOS_TEAM_ID }}
           MACOS_APPLE_ID_PASSWORD: ${{ secrets.MACOS_APPLE_ID_PASSWORD }}
         run: |
+          cd packages/dart/twh_tools
           xcrun notarytool submit tarball/${{ matrix.output-name }}.zip \
             --apple-id "$MACOS_APPLE_ID" \
             --team-id "$MACOS_TEAM_ID" \
@@ -82,7 +89,7 @@ jobs:
       - name: upload
         shell: bash
         run: |
-          export TARGET_GZ=${{ matrix.output-name }}_${{ github.event.release.tag_name }}*
-          tar -czvf $TARGET_GZ twh/*
-          gh release upload ${{ github.event.release.tag_name }} $TARGET_GZ
+          cd packages/dart/twh_tools/tarball
+          export TARGET_GZ=${{ matrix.output-name }}_${{ github.event.release.tag_name }}
+          gh release upload ${{ github.event.release.tag_name }}* $TARGET_GZ
     
