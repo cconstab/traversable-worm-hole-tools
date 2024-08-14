@@ -59,20 +59,7 @@ jobs:
               dart compile exe -o twh/$bin_name $dart_file
           done
           chmod +x twh/*
-      # zip the build
-      - if: ${{ matrix.os == 'macos-13' || matrix.os == 'macos-14' }}
-        run: | 
-          cd packages/dart/twh_tools
-          ditto -c -k --keepParent twh tarball/${{ matrix.output-name }}
-      - if: ${{ matrix.os == 'ubuntu-latest' }}
-        run: |
-          cd packages/dart/twh_tools
-          tar -cvzf tarball/${{ matrix.output-name }} twh
-      - if: ${{ matrix.os == 'windows-latest' }}
-        run: |
-          cd packages/dart/twh_tools
-          Compress-Archive -Path twh -Destination tarball/${{ matrix.output-name }}
-      # codesign for apple
+      # Sign and zip the build
       - if: ${{ matrix.os == 'macos-13' || matrix.os == 'macos-14' }}
         name: Import certificates
         env:
@@ -102,6 +89,16 @@ jobs:
             --timestamp \
             -v \
             twh/{at_activate,twh_put,twh_get,twh_pub,twh_sub}
+          ditto -c -k --keepParent twh tarball/${{ matrix.output-name }}
+      - if: ${{ matrix.os == 'ubuntu-latest' }}
+        run: |
+          cd packages/dart/twh_tools
+          tar -cvzf tarball/${{ matrix.output-name }} twh
+      - if: ${{ matrix.os == 'windows-latest' }}
+        run: |
+          cd packages/dart/twh_tools
+          Compress-Archive -Path twh -Destination tarball/${{ matrix.output-name }}
+
       # notarize the build
       - if: ${{ matrix.os == 'macos-13' || matrix.os == 'macos-14' }}
         env:
