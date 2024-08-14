@@ -46,6 +46,7 @@ jobs:
         run: |
           cd packages/dart/twh_tools
           mkdir twh
+          mkdir tarball
           dart pub get
           dart analyze
           export DART_BINS=$(ls bin/*.dart)
