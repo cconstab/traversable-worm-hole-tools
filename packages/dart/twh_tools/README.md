@@ -1,9 +1,11 @@
 **Traversable Worm Hole Tools**
 
-A few simple tools using the atPlatform and the Dart programing language.
+TWH_Tools allow you to send small but critical information from one machine to another independent of location, end to end encrypted and with No Ports open (aka attack surfaces).
+
+Combined with the SSH No Ports tools these can provide a way to manage remote machines securely. These tools were built to get AES keys to MQTT brokers and clients autonomously but can be used for pretty much anything, even binary data if encoded into Unicode or base64.
 
 
-Built binaries are available in the [latest release](https://github.com/cconstab/traversable-worm-hole-tools/releases/latest)
+Pre-built binaries are available in the [latest release](https://github.com/cconstab/traversable-worm-hole-tools/releases/latest)
 
 To start you will need at least two atSigns, these are available for free if you want random assigned words or can be purchased if you want particlar words at [my.atsign.com](my.atsign.com).
 
