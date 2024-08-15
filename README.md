@@ -33,7 +33,9 @@ The code is written in Dart but the GitHub Action produces binaries for Mac/Linu
 ### How?
 
 To use the code/binaries
+**Full instructions are** [here](https://github.com/cconstab/traversable-worm-hole-tools/tree/trunk/packages/dart/twh_tools)
 
+**TL;DR**
 Get two atSigns from my.atsign.com
 activate the atSigns using `at_activate` on your local machine get keys setup on the remote machine using `at_activate` then use the put/get and pub/sub tools. 
 
