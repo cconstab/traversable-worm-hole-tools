@@ -42,8 +42,7 @@ class FileSender {
         fileToSend, fileEncryptionKey, params.chunkSize,
         ivBase64: iv);
       filename = basename(encryptedFile.path);
-    var encryptedFileName =
-        EncryptionUtil.encryptValue(filename, fileEncryptionKey, ivBase64: iv);
+    var encryptedFileName = md5.convert(filename.codeUnits);
 
     try {
       fullUrl = '$filebin/$digest/$encryptedFileName';
