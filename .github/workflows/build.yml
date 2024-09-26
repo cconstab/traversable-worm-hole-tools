@@ -37,7 +37,7 @@ jobs:
     name: Upload ${{ matrix.os }} binaries to release ${{ github.event.release.tag_name }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4.1.7
+        uses: actions/checkout@v4.2.0
       - uses: dart-lang/setup-dart@v1.6.5
         with:
           sdk: stable
